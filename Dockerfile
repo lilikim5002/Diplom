@@ -1,4 +1,3 @@
-
 FROM node:16-alpine AS client
 
 WORKDIR /app/Textura_Front
@@ -12,8 +11,6 @@ COPY ./Textura_Front ./
 RUN npm run build --prod
 
 
-
-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS builder
 
 WORKDIR /src
@@ -23,18 +20,14 @@ RUN dotnet restore "./Texture.csproj"
 
 COPY . .
 
-WORKDIR "/src/Diplom_Back" # Убедитесь, что мы находимся в правильной директории бэкенда
+WORKDIR "/src/Diplom_Back"
 RUN dotnet build "Texture.csproj" -c Release -o /app/build
-
-
 
 
 FROM builder AS publish
 
-WORKDIR "/src/Diplom_Back" # Убедитесь, что мы находимся в правильной директории бэкенда
+WORKDIR "/src/Diplom_Back"
 RUN dotnet publish "Texture.csproj" -c Release -o /app/publish
-
-
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
@@ -42,8 +35,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 
 COPY --from=publish /app/publish .
-COPY --from=client /app/dist ./wwwroot
+COPY --from=client /app/Textura_Front/dist ./wwwroot  # Исправлено: явный путь к dist
 
-EXPOSE 5000 # Открываем порт для API
+EXPOSE 5000
 
 ENTRYPOINT ["dotnet", "Texture.dll"]
