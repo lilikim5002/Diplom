@@ -15,7 +15,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS builder
 
 WORKDIR /src
 
-COPY ["Diplom_Back/API/Texture.csproj", "./"]
+COPY ["./Diplom_Back/API/Texture.csproj", "./"]  
 RUN dotnet restore "./Texture.csproj"
 
 COPY . .

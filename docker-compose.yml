@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8000:5000"  # Пробрасываем порт 5000 (внутри контейнера) на порт 8000 на хост-машине
+      - "8000:5000"  
     depends_on:
       - db
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development  # Или Production, в зависимости от вашей среды
+      - ASPNETCORE_ENVIRONMENT=Development  
       - ConnectionStrings__DefaultConnection="Host=db;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword"
 
   db:
@@ -21,7 +21,7 @@ services:
       - POSTGRES_PASSWORD=mypassword
       - POSTGRES_DB=mydatabase
     volumes:
-      - db_data:/var/lib/postgresql/data # Это сохраняет данные между перезапусками контейнера
+      - db_data:/var/lib/postgresql/data 
 
 volumes:
-  db_data: #Определяем именованный том для PostgreSQL
+  db_data: 
