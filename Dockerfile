@@ -32,6 +32,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY --from=client /app/Textura_Front/dist ./wwwroot
-
 EXPOSE 5000
 ENTRYPOINT ["dotnet", "Texture.dll"]
