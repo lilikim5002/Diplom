@@ -1,16 +1,30 @@
+version: "3.9"
 
 services:
-  web:
+  api:
     build:
-      context: .
+      context: ./Diplom_Back/API
       dockerfile: Dockerfile
     ports:
-      - "8000:5000"  
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection="Host=db;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword"
     depends_on:
       - db
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development  
-      - ConnectionStrings__DefaultConnection="Host=db;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword"
+
+  frontend:
+    build:
+      context: ./Textura_Front
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080" 
+    networks:
+      - app-network
+    depends_on:
+      - api 
 
   db:
     image: postgres:13
@@ -21,7 +35,13 @@ services:
       - POSTGRES_PASSWORD=mypassword
       - POSTGRES_DB=mydatabase
     volumes:
-      - db_data:/var/lib/postgresql/data 
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
-  db_data: 
+  db_data:
